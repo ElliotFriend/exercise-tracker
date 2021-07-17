@@ -1,10 +1,11 @@
 {
 	"name": "fcc-exercise-tracker",
 	"version": "0.1.0",
-	"description": "A REST API project, part of Free Code Camp's curriculum",
-	"main": "server.js",
+	"author": "Elliot J. Voris",
+	"description": "A very simple exercise tracker API project",
+	"main": "app.js",
 	"scripts": {
-		"start": "node server.js"
+		"start": "node app.js"
 	},
 	"dependencies": {
 		"dotenv": "^8.2.0",
@@ -12,7 +13,7 @@
 		"cors": "^2.8.5"
 	},
 	"repository": {
-		"url": "https://github.com/freeCodeCamp/boilerplate-project-exercisetracker"
+		"url": "https://github.com/ElliotFriend/exercise-tracker"
 	},
 	"license": "MIT",
 	"keywords": [
