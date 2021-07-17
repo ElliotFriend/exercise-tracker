@@ -68,6 +68,18 @@ const createExerciseLog = async (newExerciseLog, done) => {
   })
 }
 
+const getExerciseLogs = async (userId, query, done) => {
+  let dbQuery = ExerciseLog.find({ user: userId })
+  .select({ _id: 0, description: 1, duration: 1, date: 1 })
+  if (query.from) dbQuery.gte('date', query.from)
+  if (query.to) dbQuery.lte('date', query.to)
+  if (query.limit) dbQuery.limit(parseInt(query.limit))
+  dbQuery.exec(function(err, data) {
+    if (err) return console.log(err)
+    done(null, data)
+  })
+}
+
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('public'))
@@ -107,7 +119,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       res.json({
         _id: userDoc._id,
         username: userDoc.username,
-        date: logDoc.date,
+        date: logDoc.date.toDateString(),
         duration: logDoc.duration,
         description: logDoc.description,
       })
@@ -115,6 +127,21 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
   })
 })
 
+app.get('/api/users/:_id/logs', async (req, res) => {
+  let userId = req.params._id
+  let userDoc = getUserInfo(userId, async (userErr, userDoc) => {
+    if (userErr) return console.log(userErr)
+    let logQuery = getExerciseLogs(userId, req.query, async (queryErr, logQuery) => {
+      if (queryErr) console.log(queryErr)
+      res.json({
+        _id: userDoc._id,
+        username: userDoc.username,
+        count: logQuery.length,
+        log: logQuery
+      })
+    })
+  })
+})
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
