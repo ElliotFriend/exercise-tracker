@@ -119,7 +119,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       res.json({
         _id: userDoc._id,
         username: userDoc.username,
-        date: logDoc.date.toUTCString(),
+        date: logDoc.date.toDateString(),
         duration: logDoc.duration,
         description: logDoc.description,
       })
